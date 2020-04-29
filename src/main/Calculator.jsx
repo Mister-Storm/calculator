@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Calculator.css';
 import Button from '../Components/Button'
 import Display from '../Components/Display'
+import ReturnValues from './ReturnValues'
 
 const initialState = {
     displayValue: '0',
@@ -30,19 +31,12 @@ export default class Calculator extends Component {
         if(this.state.current === 0) {
             this.setState({operation, current:1, clearDisplay:true});
         } else {
+            const returnValues = ReturnValues;
             const equals = operation === '=';
             const currentOperation = this.state.operation;
             const values = {...this.state.values};
             values[0] = values[0] === 'Err!!!!' ? 0 : values[0];
-            switch (currentOperation) {
-                case '+' : values[0] = values[0] + values[1];
-                break;
-                case '-' : values[0] = values[0] - values[1];
-                break;
-                case '*' : values[0] = values[0] * values[1];
-                break;
-                default : values[0]= values[1] !== 0 ? values[0] / values[1] : 'Err!!!!';
-            }
+            values[0] = returnValues(currentOperation, values);
             values[1] = 0;
             this.setState({
                 displayValue: values[0],
